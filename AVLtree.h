@@ -7,8 +7,9 @@
 #include <algorithm>
 #include <cstdbool>
 #include <iostream>
-using std::cout;
-using std::endl;
+//using std::cout;
+//using std::endl;
+using namespace std;
 typedef enum {
     AVL_SUCCESS,
     AVL_NULL_ARG,
@@ -22,14 +23,19 @@ private:
     class TreeNode{
     private:
         T data;
-        int height;
         TreeNode* l_son;
         TreeNode* r_son;
+        int height;
     public:
         //c'tor
-        explicit TreeNode(const T& data):data(data), r_son(nullptr), l_son(nullptr), height(1){}
+        explicit TreeNode(const T& data):data(data),l_son(nullptr), r_son(nullptr), height(1){}
         //d'tor
-        ~TreeNode() = default;
+        ~TreeNode() {
+            if (l_son)
+                delete l_son;
+            if (r_son)
+                delete r_son;
+        }
         //update height
         void updateHeight(){
             if (r_son == nullptr && l_son == nullptr){
@@ -182,7 +188,12 @@ private:
             cout << node->data<< endl;
             inorderTraverse(node->r_son);
         }
-
+        void treeClearNodes(TreeNode* node){
+            if (l_son)
+                delete l_son;
+            if (r_son)
+                delete r_son;
+        }
     };
     TreeNode *root;
     int num_of_nodes;
@@ -190,7 +201,9 @@ public:
     //c'tor
     AVLTree() : root(nullptr), num_of_nodes(0) {}
     //d'tor
-    ~AVLTree() = default;
+    ~AVLTree() {
+        delete root;
+    }
     //insert
     void insert(T data){
 
@@ -224,6 +237,11 @@ public:
         root->inorderTraverse(root);
     }
 
+    void treeClear(){
+        if (root)
+            root->treeClearNodes(root);
+        root = nullptr;
+    }
 
 };
 
