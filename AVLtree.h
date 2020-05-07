@@ -35,6 +35,8 @@ private:
                 delete l_son;
             if (r_son)
                 delete r_son;
+
+
         }
         //update height
         void updateHeight(){
@@ -235,12 +237,6 @@ public:
         if (root == nullptr)
             return;
         root->inorderTraverse(root);
-    }
-
-    void treeClear(){
-        if (root)
-            root->treeClearNodes(root);
-        root = nullptr;
     }
 
 };
