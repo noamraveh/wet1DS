@@ -230,6 +230,7 @@ public:
             return; //throw node does not exist
         }
         root = root->removeNode(data);
+        num_of_nodes--;
         //success
     }
     //inorder traverse
