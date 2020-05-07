@@ -196,6 +196,27 @@ private:
             if (r_son)
                 delete r_son;
         }
+        void inorderFillArray(int amount,T* array){
+            if (l_son){
+                l_son->inorderFillArray(amount, array);
+            }
+        }
+
+        T* findDataNode(T* search_data){
+            if (data == search_data){
+                return data;
+            }
+            if (!r_son && !l_son){
+                return nullptr;
+            }
+            else if (search_data < data){
+                return l_son->findDataNode(search_data);
+            }
+            else {
+                return r_son->findDataNode(search_data);
+            }
+        }
+
     };
     TreeNode *root;
     int num_of_nodes;
@@ -233,12 +254,32 @@ public:
         num_of_nodes--;
         //success
     }
+    //findData
+    T* findData(T search_data){
+        if (root == nullptr){
+            return nullptr;
+        }
+        return root->findDataNode(search_data);
+    }
     //inorder traverse
     void inorder(){
         if (root == nullptr)
             return;
         root->inorderTraverse(root);
     }
+
+    void inorderToArray(int amount,T* array){
+        if (root == nullptr){
+            return;
+        }
+        int i=0;
+        root->inorderFillArray(i, amount, array);
+    }
+
+
+
+
+
 
 
 };

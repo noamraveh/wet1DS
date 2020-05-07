@@ -5,15 +5,17 @@
  *      Author: shirel
  */
 
-#include "AVLTree.h"
+#include "AVLtree.h"
 #include <vector>
 #include <ostream>
 #include <random>
 #include <chrono>
 #include <algorithm>
+#include <cstdbool>
+#include <iostream>
 
 int main(){
-	AVLTree<int, int> tree;
+	AVLTree<int> tree;
 
 	//Specific Cases
 
@@ -23,31 +25,31 @@ int main(){
 	3 BF: 0 Height: 0 */
 
 	//basic LL root change
-	tree.addNode(3,3);
-	tree.addNode(2,2);
-	tree.addNode(1,1);
-	tree.printTree();
+	tree.insert(3);
+	tree.insert(2);
+	tree.insert(1);
+	tree.inorder();
 	tree.treeClear();
 
 	//basic LR root change
-	tree.addNode(3,3);
-	tree.addNode(1,1);
-	tree.addNode(2,2);
-	tree.printTree();
+	tree.insert(3);
+	tree.insert(1);
+	tree.insert(2);
+	tree.inorder();
 	tree.treeClear();
 
 	//basic RR root change
-	tree.addNode(1,1);
-	tree.addNode(2,2);
-	tree.addNode(3,3);
-	tree.printTree();
+	tree.insert(1);
+	tree.insert(2);
+	tree.insert(3);
+	tree.inorder();
 	tree.treeClear();
 
 	//basic RL root change
-	tree.addNode(1,1);
-	tree.addNode(3,3);
-	tree.addNode(2,2);
-	tree.printTree();
+	tree.insert(1);
+	tree.insert(3);
+	tree.insert(2);
+	tree.inorder();
 	tree.treeClear();
 
 	//basic LR not root change
@@ -60,15 +62,15 @@ int main(){
 	6 BF: 1 Height: 3
 	7 BF: 0 Height: 0
 	8 BF: 1 Height: 1 */
-	tree.addNode(6,6);
-	tree.addNode(4,4);
-	tree.addNode(8,8);
-	tree.addNode(3,3);
-	tree.addNode(5,5);
-	tree.addNode(7,7);
-	tree.addNode(1,1);
-	tree.addNode(2,2);
-	tree.printTree();
+	tree.insert(6);
+	tree.insert(4);
+	tree.insert(8);
+	tree.insert(3);
+	tree.insert(5);
+	tree.insert(7);
+	tree.insert(1);
+	tree.insert(2);
+	tree.inorder();
 	tree.treeClear();
 
 	//basic LL not root change
@@ -81,15 +83,16 @@ int main(){
 	6 BF: 1 Height: 3
 	7 BF: 0 Height: 0
 	8 BF: 1 Height: 1 */
-	tree.addNode(6,6);
-	tree.addNode(4,4);
-	tree.addNode(8,8);
-	tree.addNode(3,3);
-	tree.addNode(5,5);
-	tree.addNode(7,7);
-	tree.addNode(2,2);
-	tree.addNode(1,1);
-	tree.printTree();
+	tree.insert(6);
+	tree.insert(4);
+	tree.insert(8);
+	tree.insert(3);
+	tree.insert(5);
+	tree.insert(7);
+	tree.insert(2);
+	tree.insert(1);
+	tree.inorder();
+	cout << endl;
 	tree.treeClear();
 
 	//basic RR not root change
@@ -99,12 +102,12 @@ int main(){
 	3 BF: 0 Height: 0
 	5 BF: 1 Height: 2
 	7 BF: 0 Height: 0*/
-	tree.addNode(5,5);
-	tree.addNode(7,7);
-	tree.addNode(1,1);
-	tree.addNode(2,2);
-	tree.addNode(3,3);
-	tree.printTree();
+	tree.insert(5);
+	tree.insert(7);
+	tree.insert(1);
+	tree.insert(2);
+	tree.insert(3);
+	tree.inorder();
 	tree.treeClear();
 
 	//basic RL not root change
@@ -114,12 +117,12 @@ int main(){
 	3 BF: 0 Height: 0
 	5 BF: 1 Height: 2
 	7 BF: 0 Height: 0*/
-	tree.addNode(5,5);
-	tree.addNode(7,7);
-	tree.addNode(1,1);
-	tree.addNode(3,3);
-	tree.addNode(2,2);
-	tree.printTree();
+	tree.insert(5);
+	tree.insert(7);
+	tree.insert(1);
+	tree.insert(3);
+	tree.insert(2);
+	tree.inorder();
 	tree.treeClear();
 
 	//root deletion no roll successor is a neighbour
@@ -128,13 +131,13 @@ int main(){
 	3 BF: 1 Height: 1
 	5 BF: 1 Height: 2
 	6 BF: 0 Height: 0*/
-	tree.addNode(4,4);
-	tree.addNode(5,5);
-	tree.addNode(3,3);
-	tree.addNode(2,2);
-	tree.addNode(6,6);
-	tree.removeNode(4);
-	tree.printTree();
+	tree.insert(4);
+	tree.insert(5);
+	tree.insert(3);
+	tree.insert(2);
+	tree.insert(6);
+	tree.remove(4);
+	tree.inorder();
 	tree.treeClear();
 
 	//root deletion no roll successor is not a neighbour
@@ -145,15 +148,15 @@ int main(){
 	6 BF: 0 Height: 0
 	7 BF: 0 Height: 1
 	8 BF: 0 Height: 0 */
-	tree.addNode(4,4);
-	tree.addNode(3,3);
-	tree.addNode(7,7);
-	tree.addNode(2,2);
-	tree.addNode(5,5);
-	tree.addNode(8,8);
-	tree.addNode(6,6);
-	tree.removeNode(4);
-	tree.printTree();
+	tree.insert(4);
+	tree.insert(3);
+	tree.insert(7);
+	tree.insert(2);
+	tree.insert(5);
+	tree.insert(8);
+	tree.insert(6);
+	tree.remove(4);
+	tree.inorder();
 	tree.treeClear();
 
 	//node deletion no roll successor is a neighbour case7
@@ -165,16 +168,16 @@ int main(){
 	7 BF: 1 Height: 3
 	8 BF: -1 Height: 1
 	9 BF: 0 Height: 0*/
-	tree.addNode(7,7);
-	tree.addNode(3,3);
-	tree.addNode(8,8);
-	tree.addNode(2,2);
-	tree.addNode(4,4);
-	tree.addNode(9,9);
-	tree.addNode(5,5);
-	tree.addNode(1,1);
-	tree.removeNode(3);
-	tree.printTree();
+	tree.insert(7);
+	tree.insert(3);
+	tree.insert(8);
+	tree.insert(2);
+	tree.insert(4);
+	tree.insert(9);
+	tree.insert(5);
+	tree.insert(1);
+	tree.remove(3);
+	tree.inorder();
 	tree.treeClear();
 
 	//node deletion no roll successor is not a neighbour case8
@@ -190,20 +193,20 @@ int main(){
 	12 BF: -1 Height: 2
 	13 BF: -1 Height: 1
 	14 BF: 0 Height: 0*/
-	tree.addNode(9,9);
-	tree.addNode(3,3);
-	tree.addNode(12,12);
-	tree.addNode(2,2);
-	tree.addNode(7,7);
-	tree.addNode(10,10);
-	tree.addNode(13,13);
-	tree.addNode(1,1);
-	tree.addNode(5,5);
-	tree.addNode(8,8);
-	tree.addNode(14,14);
-	tree.addNode(6,6);
-	tree.removeNode(3);
-	tree.printTree();
+	tree.insert(9);
+	tree.insert(3);
+	tree.insert(12);
+	tree.insert(2);
+	tree.insert(7);
+	tree.insert(10);
+	tree.insert(13);
+	tree.insert(1);
+	tree.insert(5);
+	tree.insert(8);
+	tree.insert(14);
+	tree.insert(6);
+	tree.remove(3);
+	tree.inorder();
 	tree.treeClear();
 
 	//node deletion causing LR case9
@@ -214,15 +217,15 @@ int main(){
 	4 BF: 0 Height: 2
 	7 BF: -1 Height: 1
 	8 BF: 0 Height: 0*/
-	tree.addNode(7,7);
-	tree.addNode(2,2);
-	tree.addNode(8,8);
-	tree.addNode(1,1);
-	tree.addNode(4,4);
-	tree.addNode(9,9);
-	tree.addNode(3,3);
-	tree.removeNode(9);
-	tree.printTree();
+	tree.insert(7);
+	tree.insert(2);
+	tree.insert(8);
+	tree.insert(1);
+	tree.insert(4);
+	tree.insert(9);
+	tree.insert(3);
+	tree.remove(9);
+	tree.inorder();
 	tree.treeClear();
 
 	//node deletion causing LL case10
@@ -233,15 +236,15 @@ int main(){
 	4 BF: 0 Height: 0
 	7 BF: 0 Height: 1
 	8 BF: 0 Height: 0*/
-	tree.addNode(7,7);
-	tree.addNode(3,3);
-	tree.addNode(8,8);
-	tree.addNode(2,2);
-	tree.addNode(4,4);
-	tree.addNode(9,9);
-	tree.addNode(1,1);
-	tree.removeNode(9);
-	tree.printTree();
+	tree.insert(7);
+	tree.insert(3);
+	tree.insert(8);
+	tree.insert(2);
+	tree.insert(4);
+	tree.insert(9);
+	tree.insert(1);
+	tree.remove(9);
+	tree.inorder();
 	tree.treeClear();
 
 	//node deletion causing RR case11
@@ -252,15 +255,15 @@ int main(){
 	8 BF: 0 Height: 2
 	9 BF: -1 Height: 1
 	10 BF: 0 Height: 0*/
-	tree.addNode(3,3);
-	tree.addNode(2,2);
-	tree.addNode(8,8);
-	tree.addNode(7,7);
-	tree.addNode(1,1);
-	tree.addNode(9,9);
-	tree.addNode(10,10);
-	tree.removeNode(1);
-	tree.printTree();
+	tree.insert(3);
+	tree.insert(2);
+	tree.insert(8);
+	tree.insert(7);
+	tree.insert(1);
+	tree.insert(9);
+	tree.insert(10);
+	tree.remove(1);
+	tree.inorder();
 	tree.treeClear();
 
 	//node deletion causing RL case12
@@ -271,15 +274,15 @@ int main(){
 	10 BF: 0 Height: 0
 	13 BF: 0 Height: 1
 	14 BF: 0 Height: 0*/
-	tree.addNode(3,3);
-	tree.addNode(2,2);
-	tree.addNode(13,13);
-	tree.addNode(7,7);
-	tree.addNode(1,1);
-	tree.addNode(14,14);
-	tree.addNode(10,10);
-	tree.removeNode(1);
-	tree.printTree();
+	tree.insert(3);
+	tree.insert(2);
+	tree.insert(13);
+	tree.insert(7);
+	tree.insert(1);
+	tree.insert(14);
+	tree.insert(10);
+	tree.remove(1);
+	tree.inorder();
 	tree.treeClear();
 
 	//double rotations RL and RR case 13
@@ -295,20 +298,20 @@ int main(){
 	19 BF: -1 Height: 2
 	21 BF: -1 Height: 1
 	23 BF: 0 Height: 0*/
-	tree.addNode(9,9);
-	tree.addNode(3,3);
-	tree.addNode(15,15);
-	tree.addNode(1,1);
-	tree.addNode(7,7);
-	tree.addNode(13,13);
-	tree.addNode(19,19);
-	tree.addNode(5,5);
-	tree.addNode(11,11);
-	tree.addNode(17,17);
-	tree.addNode(21,21);
-	tree.addNode(23,23);
-	tree.removeNode(1);
-	tree.printTree();
+	tree.insert(9);
+	tree.insert(3);
+	tree.insert(15);
+	tree.insert(1);
+	tree.insert(7);
+	tree.insert(13);
+	tree.insert(19);
+	tree.insert(5);
+	tree.insert(11);
+	tree.insert(17);
+	tree.insert(21);
+	tree.insert(23);
+	tree.remove(1);
+	tree.inorder();
 	tree.treeClear();
 
 	//double rotations RR and RR case 14
@@ -324,20 +327,20 @@ int main(){
 	19 BF: -1 Height: 2
 	21 BF: -1 Height: 1
 	23 BF: 0 Height: 0*/
-	tree.addNode(9,9);
-	tree.addNode(3,3);
-	tree.addNode(15,15);
-	tree.addNode(1,1);
-	tree.addNode(7,7);
-	tree.addNode(13,13);
-	tree.addNode(19,19);
-	tree.addNode(8,8);
-	tree.addNode(11,11);
-	tree.addNode(17,17);
-	tree.addNode(21,21);
-	tree.addNode(23,23);
-	tree.removeNode(1);
-	tree.printTree();
+	tree.insert(9);
+	tree.insert(3);
+	tree.insert(15);
+	tree.insert(1);
+	tree.insert(7);
+	tree.insert(13);
+	tree.insert(19);
+	tree.insert(8);
+	tree.insert(11);
+	tree.insert(17);
+	tree.insert(21);
+	tree.insert(23);
+	tree.remove(1);
+	tree.inorder();
 	tree.treeClear();
 
 	//double rotations RL and LL case 15
@@ -354,20 +357,20 @@ int main(){
 	18 BF: 0 Height: 1
 	20 BF: 0 Height: 0
 	 */
-	tree.addNode(15,15);
-	tree.addNode(10,10);
-	tree.addNode(20,20);
-	tree.addNode(8,8);
-	tree.addNode(11,11);
-	tree.addNode(17,17);
-	tree.addNode(21,21);
-	tree.addNode(7,7);
-	tree.addNode(9,9);
-	tree.addNode(12,12);
-	tree.addNode(18,18);
-	tree.addNode(6,6);
-	tree.removeNode(21);
-	tree.printTree();
+	tree.insert(15);
+	tree.insert(10);
+	tree.insert(20);
+	tree.insert(8);
+	tree.insert(11);
+	tree.insert(17);
+	tree.insert(21);
+	tree.insert(7);
+	tree.insert(9);
+	tree.insert(12);
+	tree.insert(18);
+	tree.insert(6);
+	tree.remove(21);
+	tree.inorder();
 	tree.treeClear();
 
 	//double rotations LR and LL case 16
@@ -383,20 +386,20 @@ int main(){
 	20 BF: 0 Height: 0
 	21 BF: 0 Height: 1
 	22 BF: 0 Height: 0 */
-	tree.addNode(15,15);
-	tree.addNode(10,10);
-	tree.addNode(20,20);
-	tree.addNode(8,8);
-	tree.addNode(11,11);
-	tree.addNode(17,17);
-	tree.addNode(22,22);
-	tree.addNode(7,7);
-	tree.addNode(9,9);
-	tree.addNode(12,12);
-	tree.addNode(21,21);
-	tree.addNode(6,6);
-	tree.removeNode(17);
-	tree.printTree();
+	tree.insert(15);
+	tree.insert(10);
+	tree.insert(20);
+	tree.insert(8);
+	tree.insert(11);
+	tree.insert(17);
+	tree.insert(22);
+	tree.insert(7);
+	tree.insert(9);
+	tree.insert(12);
+	tree.insert(21);
+	tree.insert(6);
+	tree.remove(17);
+	tree.inorder();
 	tree.treeClear();
 
 	//delete node cause LR
@@ -406,13 +409,13 @@ int main(){
 	4 BF: 0 Height: 0
 	6 BF: 1 Height: 1*/
 
-	tree.addNode(5,5);
-	tree.addNode(3,3);
-	tree.addNode(6,6);
-	tree.addNode(2,2);
-	tree.addNode(4,4);
-	tree.removeNode(5);
-	tree.printTree();
+	tree.insert(5);
+	tree.insert(3);
+	tree.insert(6);
+	tree.insert(2);
+	tree.insert(4);
+	tree.remove(5);
+	tree.inorder();
 	tree.treeClear();
 
 	//delete node cause LR
@@ -420,14 +423,14 @@ int main(){
 	 * 2 BF: 0 Height: 0
 	3 BF: 0 Height: 1
 	6 BF: 0 Height: 0*/
-	tree.addNode(5,5);
-	tree.addNode(3,3);
-	tree.addNode(6,6);
-	tree.addNode(2,2);
-	tree.removeNode(5);
-	tree.printTree();
+	tree.insert(5);
+	tree.insert(3);
+	tree.insert(6);
+	tree.insert(2);
+	tree.remove(5);
+	tree.inorder();
 	tree.treeClear();
-
+/*
 	std::vector<int> vector;
 	 for (int i=1; i<=100; i++) vector.push_back(i);
 
@@ -436,20 +439,22 @@ int main(){
 		 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 		 shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
 		 for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); ++it){
-				tree.addNode(*it,*it);
+				tree.insert(*it);
 
 		 }
-		 tree.printTree();
+		 tree.inorder();
 		 shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
 		 for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); ++it){
-				tree.removeNode(*it);
-				tree.printTree();
+				tree.remove(*it);
+				tree.inorder();
+				cout << endl;
 
 		 }
 		 tree.treeClear();
-		 tree.printTree();
+		 tree.inorder();
 		 std::cout << '\n';
 	}
+	 */
 
 	return 0;
 }
