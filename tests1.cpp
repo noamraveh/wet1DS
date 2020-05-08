@@ -1,7 +1,7 @@
 
 #include <iostream>
 using namespace std;
-#include "AVLtree.h"
+#include "FinalAVLTree.h"
 
 int main() {
 	AVLTree<int> tree1;

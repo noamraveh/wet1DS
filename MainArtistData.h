@@ -5,6 +5,7 @@
 #ifndef WET1DS_MAINARTISTDATA_H
 #define WET1DS_MAINARTISTDATA_H
 #include "SongData.h"
+#include "FinalAVLTree.h"
 
 class MainArtistData{
     int id;
@@ -20,6 +21,15 @@ public:
         delete[] songs_array; //everything else was deleted by this point
     }
 
+    SongData* getArray(){
+        return songs_array;
+    }
+    void updateSongListNodeptrs(ListNode<StreamData>* stream_node){
+        for(int i=0;i<num_songs;i++){
+            songs_array[i].setStreamNode(stream_node);
+        }
+
+    }
     bool operator <(const MainArtistData &artistInfo){
         return id < artistInfo.id;
     }

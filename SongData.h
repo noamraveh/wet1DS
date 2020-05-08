@@ -13,8 +13,8 @@ class SongData{
     ListNode<StreamData>* stream_node; //linked list node
     int num_streams;
 public:
-
-    SongData(int id, ListNode<ListNode>* stream_node):id(id),stream_node(stream_node){};
+    SongData() = default
+    SongData(int id,int num_streams):id(id),stream_node(nullptr),num_streams(num_streams){};
     ~Song()
     int getSongID();
     ArtistData* getArtist();
@@ -23,8 +23,12 @@ public:
     Song &operator=(Song &song) = delete;
     bool operator>(const Song &song);
     bool operator==(const Song &song);
-    StreamData* getStreamNode(){
+    ListNode<StreamData>* getStreamNode(){
         return stream_node;
+    }
+
+    void setStreamNode(ListNode<StreamData> *new_stream_node) {
+        stream_node = new_stream_node;
     }
 };
 

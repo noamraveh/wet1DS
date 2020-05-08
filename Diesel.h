@@ -10,6 +10,7 @@
 #include "ArtistData.h"
 #include "Library1.h"
 #include "LinkedList.h"
+#include "FinalAVLTree.h"
 
 class Diesel {
     AVLTree<MainArtistData> all_artists_tree;
@@ -19,7 +20,7 @@ public:
     Diesel() {
         StreamData zero_streams_data(0);
         num_streams_list.InsertFirst(zero_streams_data);
-        zero_streams_tree = num_streams_list.first->data.artists_tree;
+        zero_streams_tree = num_streams_list.getFirstNode()->data.artists_tree;
     };
 
     ~Diesel() = default;
@@ -29,15 +30,23 @@ public:
         if (artistID<=0 || numOfSongs<=0)
             return INVALID_INPUT;
 
+        //create artist node with songs tree
+        ArtistData new_artist(artistID,numOfSongs,0);
+
         //add to main all_artists_tree
         MainArtistData main_artist_data(artistID, numOfSongs);
         all_artists_tree.insert(main_artist_data);
 
-        //create artist node with tree
-        ArtistData new_artist(artistID, numOfSongs,num_streams_list.first);
+        //fill array with songs from songs tree
+        new_artist.initArtistArray(numOfSongs,main_artist_data.getArray());
+
+        //add linked list node ptr to each song
+        new_artist.updateSongListNodeptrs(num_streams_list.getFirstNode());
 
         //add node to zero streams tree
         zero_streams_tree->insert(new_artist);
+
+        return SUCCESS;
     }
 
     StatusType RemoveArtist(int artistID){
@@ -52,8 +61,17 @@ public:
         if (!found_data)
             return FAILURE;
         SongData* found_song = found_data->getSongData(songID);
-        StreamData* found_stream_node = found_song->getStreamNode();
-
+        ListNode<StreamData>* found_stream_node = found_song->getStreamNode();
+        //check if streams+1 node exists
+        if (num_streams_list.getNextNode(found_stream_node)->data.getNumStreams() != found_stream_node->data.getNumStreams()+1){
+            StreamData next_stream_num(found_stream_node->data.getNumStreams() + 1);
+            num_streams_list.InsertNode(*found_stream_node,next_stream_num);
+        }
+        //remove song from current tree
+        //if needed remove artist from artist tree
+        //if need remove node from linked list
+        //if needed add artist to artist tree
+        //add song to song tree, change count num and node ptr
     }
 
     StatusType NumberOfStreams(int artistID, int songID, int *streams){

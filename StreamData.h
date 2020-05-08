@@ -15,5 +15,9 @@ class StreamData{
 public:
     explicit StreamData(int num): num_of_streams(num){}
     ~StreamData() = default;
+
+    int getNumStreams() {
+        return num_of_streams;
+    }
 };
 #endif //WET1DS_STREAMDATA_H
