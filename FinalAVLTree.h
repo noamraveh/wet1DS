@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstdbool>
 #include <iostream>
+#include <cmath>
 //using std::cout;
 //using std::endl;
 using namespace std;
@@ -205,6 +206,18 @@ public:
         cout << node->data<< endl;
         inorderTraverse(node->r_son);
     }
+    //reverse inorder remove node
+    void revInorderRemove(TreeNode* node,int to_delete){
+        if (!node)
+            return;
+        revInorderRemove(node->r_son,to_delete);
+        if (!l_son && !r_son && to_delete >0){
+            delete node;
+            node = nullptr;
+            to_delete --;
+        }
+        revInorderRemove(node->l_son,to_delete);
+    }
     void treeClearNodes(TreeNode* node){
         if (l_son)
             delete l_son;
@@ -247,7 +260,25 @@ public:
         return smallest;
     }
 
-    TreeNode();
+    TreeNode*  buildSubtree(int height){
+        if (height == 0)
+            return nullptr;
+        auto node = new TreeNode(nullptr);
+        node->l_son = buildSubtree(height-1);
+        node->r_son = buildSubtree(height-1);
+        return node;
+    }
+
+    void FillNodeFromArrayInorder(int* index,T* array) {
+        if (l_son) {
+            l_son->FillNodeFromArrayInorder(index, array);
+        }
+        data = array[*index];
+        *index = *index + 1;
+        if (r_son) {
+            r_son->FillNodeFromArrayInorder(index, array);
+        }
+    }
 };
 
 template<class T>
@@ -259,6 +290,18 @@ private:
 public:
     //c'tor
     AVLTree() : root(nullptr),min(nullptr), num_of_nodes(0) {}
+
+    //c'tor for empty tree
+    AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size) {
+        //create full tree
+        int height = ceil(log(size));
+        TreeNode<T> temp = new TreeNode<T>(nullptr);
+        root = temp->buildSubtree(height);
+        delete temp;
+        //remove redundant leaves
+        int to_delete = pow(2,height)-1 - size;
+        root->revInorderRemove(root,to_delete);
+    }
     //d'tor
     ~AVLTree() {
         delete root;
@@ -304,6 +347,14 @@ public:
         if (root == nullptr)
             return;
         root->inorderTraverse(root);
+    }
+
+    void fillTreeFromArray(T* array){
+        if (!array){
+            return;
+        }
+        int i = 0;
+        root->FillNodeFromArrayInorder(&i,array);
     }
 
     void inorderToArray(int amount,T* array){
