@@ -15,6 +15,10 @@ public:
 
     MainArtistData (int artist_id, int num_songs): id(artist_id),num_songs(num_songs) {
         songs_array = new SongData[num_songs];
+        for(int i=0; i<num_songs; i++){
+            SongData new_song(i);
+            songs_array[i] = new_song;
+        }
     }
 
     ~MainArtistData(){
@@ -24,7 +28,7 @@ public:
     SongData* getArray(){
         return songs_array;
     }
-    void updateSongListNodeptrs(ListNode<StreamData>* stream_node){
+    void updateStreamsToZero(ListNode<StreamData>* stream_node){
         for(int i=0;i<num_songs;i++){
             songs_array[i].setStreamNode(stream_node);
         }
@@ -47,6 +51,7 @@ public:
     SongData* getSongData(int song_id){
         if (song_id>num_songs)
             return nullptr;
+        return songs_array[song_id];
     }
 };
 

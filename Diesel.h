@@ -11,6 +11,7 @@
 #include "Library1.h"
 #include "LinkedList.h"
 #include "FinalAVLTree.h"
+#include "SongData.h"
 
 class Diesel {
     AVLTree<MainArtistData> all_artists_tree;
@@ -30,18 +31,17 @@ public:
         if (artistID<=0 || numOfSongs<=0)
             return INVALID_INPUT;
 
-        //create artist node with songs tree
-        ArtistData new_artist(artistID,numOfSongs,0);
-
-        //add to main all_artists_tree
+        //add to main all_artists_tree and fill array with songs
         MainArtistData main_artist_data(artistID, numOfSongs);
         all_artists_tree.insert(main_artist_data);
 
-        //fill array with songs from songs tree
-        new_artist.initArtistArray(numOfSongs,main_artist_data.getArray());
-
         //add linked list node ptr to each song
-        new_artist.updateSongListNodeptrs(num_streams_list.getFirstNode());
+        main_artist_data.updateStreamsToZero(num_streams_list.getFirstNode());
+
+        //create artist node with songs tree
+        SongData* created_array = all_artists_tree.findData(main_artist_data)->getArray();
+        ArtistData new_artist(artistID,numOfSongs);
+        new_artist.createSongsTreeFromArr(created_array);
 
         //add node to zero streams tree
         zero_streams_tree->insert(new_artist);
@@ -54,6 +54,7 @@ public:
     }
 
     StatusType AddToSongCount(int artistID, int songID){
+        //find  artist and get song, song linked list node
         if (artistID<=0 || songID<0)
             return INVALID_INPUT;
         MainArtistData search_data(artistID,-1);
@@ -62,9 +63,11 @@ public:
             return FAILURE;
         SongData* found_song = found_data->getSongData(songID);
         ListNode<StreamData>* found_stream_node = found_song->getStreamNode();
+
         //check if streams+1 node exists
-        if (num_streams_list.getNextNode(found_stream_node)->data.getNumStreams() != found_stream_node->data.getNumStreams()+1){
-            StreamData next_stream_num(found_stream_node->data.getNumStreams() + 1);
+        int current_stream_num = found_stream_node->data.getNumStreams();
+        if (num_streams_list.getNextNode(found_stream_node)->data.getNumStreams() != current_stream_num + 1){
+            StreamData next_stream_num(current_stream_num + 1);
             num_streams_list.InsertNode(*found_stream_node,next_stream_num);
         }
         //remove song from current tree

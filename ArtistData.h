@@ -9,26 +9,21 @@
 #include "SongData.h"
 #include "LinkedList.h"
 #include "StreamData.h"
+#include "MainArtistData.h"
 
 class ArtistData{
+private:
     int artist_id;
     AVLTree<SongData> songs_tree;
-    //ListNode<StreamData>* stream_node;
 public:
-    ArtistData(int id,int num_songs,int num_streams):artist_id(id){
-        for(int i=0; i<=num_songs; i++){
-            SongData new_song(i,num_streams);
-            songs_tree.insert(new_song);
-        }
+    ArtistData(int i,int size) : artist_id(i),songs_tree(size) {}
+
+    void createSongsTreeFromArr(SongData* array){
+        songs_tree.fillTreeFromArray(array);
     }
 
-    void initArtistArray(int num_songs,SongData* array){
-        songs_tree.inorderToArray(num_songs,array);
-    }
-    void updateSongListNodeptrs(ListNode<StreamData>* stream_node){
+    ~ArtistData() = default;
 
-    }
-    ~ArtistData();
 
 };
 

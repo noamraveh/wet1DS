@@ -11,10 +11,10 @@
 class SongData{
     int id;
     ListNode<StreamData>* stream_node; //linked list node
-    int num_streams;
+//    int num_streams;
 public:
-    SongData() = default
-    SongData(int id,int num_streams):id(id),stream_node(nullptr),num_streams(num_streams){};
+    //SongData() = default
+    SongData(int id=0):id(id),stream_node(nullptr){};
     ~Song()
     int getSongID();
     ArtistData* getArtist();
@@ -30,6 +30,8 @@ public:
     void setStreamNode(ListNode<StreamData> *new_stream_node) {
         stream_node = new_stream_node;
     }
+
+    //SongData():id(0) {}
 };
 
 Song::Song(int id):id(id) {}
