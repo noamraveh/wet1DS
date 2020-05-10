@@ -25,6 +25,9 @@ public:
         delete[] songs_array; //everything else was deleted by this point
     }
 
+    int getNumSongs(){
+        return num_songs;
+    }
     SongData* getArray(){
         return songs_array;
     }

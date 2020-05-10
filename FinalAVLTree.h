@@ -35,10 +35,12 @@ public:
             nullptr),height(1){}
     //d'tor
     ~TreeNode() {
-        if (l_son)
+        if (l_son) {
             delete l_son;
-        if (r_son)
+        }
+        if (r_son) {
             delete r_son;
+        }
 
 
     }

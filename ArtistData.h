@@ -14,7 +14,7 @@
 class ArtistData{
 private:
     int artist_id;
-    AVLTree<SongData> songs_tree;
+    AVLTree<SongData>* songs_tree;
 public:
     ArtistData(int i,int size) : artist_id(i),songs_tree(size) {}
 
@@ -25,6 +25,9 @@ public:
     ~ArtistData() = default;
 
 
+    AVLTree<SongData> *getSongsTree() {
+        return songs_tree;
+    }
 };
 
 #endif //WET1DS_ARTISTDATA_H

@@ -15,11 +15,13 @@ class SongData{
 public:
     //SongData() = default
     SongData(int id=0):id(id),stream_node(nullptr){};
-    ~Song()
+    ~Song() {
+        this = nullptr;
+    }
     int getSongID();
     ArtistData* getArtist();
     int getNumStreams();
-    Song (Song & song) = default;
+    Song (Song & song) = def    ault;
     Song &operator=(Song &song) = delete;
     bool operator>(const Song &song);
     bool operator==(const Song &song);
