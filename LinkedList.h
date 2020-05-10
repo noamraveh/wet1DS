@@ -65,19 +65,19 @@ public:
             return nullptr;
     }
     //InsertNode
-    ListNode<T>* InsertNode(ListNode<T>& curNode,T* data){
+    ListNode<T>* InsertNode(ListNode<T>* curNode,T* data){
         auto node = new ListNode<T>(data);
 
         if (curNode != last) { //middle
-            curNode.next->prev = node;
-            node->next = curNode.next;
-            curNode.next = node;
+            curNode->next->prev = node;
+            node->next = curNode->next;
+            curNode->next = node;
             node->prev = curNode;
         }
         else{ //insert last
             node->next = nullptr;
-            curNode.next = node;
-            node.prev = curNode;
+            curNode->next = node;
+            node->prev = curNode;
             last = node;
         }
         num_of_nodes++;

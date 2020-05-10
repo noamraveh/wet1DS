@@ -18,14 +18,17 @@ public:
 
     SongData (SongData & song) = default;
     SongData &operator=(SongData &song) = delete;
-    bool operator>(const SongData &song){
-        return id > song.id;
+    bool operator<(const SongData &song){
+        return id < song.id;
     }
     bool operator==(const SongData &song){
         return id == song.id;
     }
     ListNode<StreamData>* getStreamNode(){
         return stream_node;
+    }
+    int getNumStreams(){
+        return stream_node->data->getNumStreams();
     }
 
     void setStreamNode(ListNode<StreamData> *new_stream_node) {

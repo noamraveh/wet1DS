@@ -169,16 +169,11 @@ public:
     }
 
     //remove_node
-    TreeNode* removeNode( const T &search_data) {
+    TreeNode* removeNode( T*search_data) {
 
-        if (*search_data < *data){
-            l_son = l_son->removeNode(search_data);
-        }
-        else if (*search_data > *data){
-            r_son = r_son->removeNode(search_data);
-        }
+
             //wanted node was found
-        else {
+        if (search_data == data) {
             if (!l_son || !r_son) { //1 or 0 children
                 TreeNode *temp = l_son ? l_son : r_son;
                 if (!temp) { // no children
@@ -195,6 +190,12 @@ public:
                 data = temp->data;
                 r_son = r_son->removeNode(temp->data);
             }
+        }
+        else if (search_data < data){
+            l_son = l_son->removeNode(search_data);
+        }
+        else {
+            r_son = r_son->removeNode(search_data);
         }
         //  if (this == nullptr) return this;
         return balanceNode();
@@ -264,15 +265,15 @@ public:
     }
 
     TreeNode*  buildSubtree(int h){
-        if (h == 0)
+        if (h <= 0)
             return nullptr;
         auto node = new TreeNode();
-        node->l_son = buildSubtree(h-1);
-        node->r_son = buildSubtree(h-1);
+        node->l_son = node->l_son->buildSubtree(h-1);
+        node->r_son = node->r_son->buildSubtree(h-1);
         return node;
     }
 
-    void FillNodeFromArrayInorder(int* index,T* array) {
+    void FillNodeFromArrayInorder(int* index,T** array) {
         if (l_son) {
             l_son->FillNodeFromArrayInorder(index, array);
             l_son->parent = this;
@@ -296,14 +297,13 @@ private:
     int num_of_nodes;
 public:
     //c'tor
-    AVLTree() : root(nullptr),min(nullptr), num_of_nodes(0) {}
-
+    AVLTree() : root(nullptr), min(nullptr), num_of_nodes(0) {}
     //c'tor for empty tree
-    AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size) {
+    explicit AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size) {
         //create full tree
         int height = ceil(log(size))+1;
-        TreeNode<T>* temp = new TreeNode<T>();
-        root = temp->buildSubtree(height);
+        auto* temp = new TreeNode<T>();
+        root = temp -> buildSubtree(height);
         delete temp;
         //remove redundant leaves
         int to_delete = pow(2,height)-1 - size;
@@ -313,6 +313,18 @@ public:
     ~AVLTree() {
         delete root;
     }
+    //create almost full tree
+    /*AVLTree* almostFull(int size){
+        num_of_nodes = size;
+        int height = ceil(log(size))+1;
+        auto* temp = new TreeNode<T>();
+        root = temp->buildSubtree(height);
+        delete temp;
+        //remove redundant leaves
+        int to_delete = pow(2,height)-1 - size;
+        root->revInorderRemove(root,&to_delete);
+    }
+*/
     //insert
     void insert(T* data){
         if (root == nullptr){
