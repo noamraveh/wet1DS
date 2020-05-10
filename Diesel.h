@@ -42,6 +42,7 @@ public:
         SongData** created_array = all_artists_tree.findData(&main_artist_data)->getSongsArray();
         ArtistData new_artist(artistID,numOfSongs);
         new_artist.createSongsTreeFromArr(created_array);
+        main_artist_data.initArtistDataArray(&new_artist);
 
         //add node to zero streams tree
         zero_streams_tree->insert(&new_artist);
@@ -55,20 +56,29 @@ public:
             return INVALID_INPUT;
         MainArtistData search_data(artistID);
         MainArtistData* found_data = all_artists_tree.findData(&search_data);
-        if (!found_data)
+        if (!found_data) //No Artist Found
             return FAILURE;
+        int numSongs = found_data->getNumSongs();
         ArtistData delete_artist(artistID);
-        //go over array, for each song delete artist node (will delete songs tree also)
+        int* listNodesFlagsArray = new int[numSongs];
         ListNode<StreamData>** arr = found_data->getNodesArray();
-        for (int i=0; i< found_data->getNumSongs();i++){
-            if (arr[i]) {
-                arr[i]->data->artists_tree->remove(&delete_artist);
-                if (arr[i]->data->artists_tree->getRoot() == nullptr) {
-                    num_streams_list.removeNode(arr[i]);
-                    arr[i] = nullptr;
-                }
+
+        //go over songs array, for each song delete artist node (will delete songs tree also)
+        for (int i = 0; i < numSongs; i++){
+            arr[i]->data->artists_tree->remove(&delete_artist);
+            if (arr[i]->data->artists_tree->getRoot() == nullptr) {
+                listNodesFlagsArray[i]= 1; //needs to be deleted afterwards
+            }
+            else{
+                listNodesFlagsArray[i]= 0;
             }
         }
+        for (int j = 0 ; j<numSongs ; j++){ //delete ListNodes with no artists
+            if(listNodesFlagsArray[j]){
+                num_streams_list.removeNode(arr[j]);
+            }
+        }
+        delete[] listNodesFlagsArray;
         all_artists_tree.remove(found_data);
         return SUCCESS;
     }
@@ -117,9 +127,12 @@ public:
             to_add_tree->insert(&search_artist);
             ArtistData* added_artist = to_add_tree->findData(&search_artist);
             added_artist->getSongsTree()->insert(&to_add_song);
+            found_artist->updateArtistData(songID,added_artist); // update artistData array
         }
-        else
+        else{
             add_artist->getSongsTree()->insert(&to_add_song);
+            found_artist->updateArtistData(songID,add_artist);// update artistData array
+        }
 
         //update array ptr in main tree
         found_artist->getSongsArray()[songID] = &to_add_song;
@@ -142,8 +155,6 @@ public:
 
     StatusType GetRecommendedSongs( int numOfSongs, int *artists, int *songs);
 };
-
-
 
 
 #endif //WET1DS_DIESEL_H
