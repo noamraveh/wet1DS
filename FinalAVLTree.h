@@ -207,16 +207,18 @@ public:
         inorderTraverse(node->r_son);
     }
     //reverse inorder remove node
-    void revInorderRemove(TreeNode* node,int to_delete){
+    TreeNode<T>* revInorderRemove(TreeNode* node,int* to_delete){
         if (!node)
-            return;
-        revInorderRemove(node->r_son,to_delete);
-        if (!l_son && !r_son && to_delete >0){
+            return nullptr;
+        if (!node->l_son && !node->r_son && *to_delete >0){
             delete node;
-            node = nullptr;
-            to_delete --;
+            *to_delete = *to_delete -1;
+            return nullptr;
         }
-        revInorderRemove(node->l_son,to_delete);
+        node->r_son = revInorderRemove(node->r_son,to_delete);
+        node->l_son = revInorderRemove(node->l_son,to_delete);
+
+        return node;
     }
     void treeClearNodes(TreeNode* node){
         if (l_son)
@@ -263,7 +265,7 @@ public:
     TreeNode*  buildSubtree(int height){
         if (height == 0)
             return nullptr;
-        auto node = new TreeNode(nullptr);
+        auto node = new TreeNode();
         node->l_son = buildSubtree(height-1);
         node->r_son = buildSubtree(height-1);
         return node;
@@ -272,13 +274,17 @@ public:
     void FillNodeFromArrayInorder(int* index,T* array) {
         if (l_son) {
             l_son->FillNodeFromArrayInorder(index, array);
+            l_son->parent = this;
         }
         data = array[*index];
         *index = *index + 1;
         if (r_son) {
             r_son->FillNodeFromArrayInorder(index, array);
+            r_son->parent = this;
         }
     }
+
+
 };
 
 template<class T>
@@ -294,13 +300,13 @@ public:
     //c'tor for empty tree
     AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size) {
         //create full tree
-        int height = ceil(log(size));
-        TreeNode<T> temp = new TreeNode<T>(nullptr);
+        int height = ceil(log(size))+1;
+        TreeNode<T>* temp = new TreeNode<T>();
         root = temp->buildSubtree(height);
         delete temp;
         //remove redundant leaves
         int to_delete = pow(2,height)-1 - size;
-        root->revInorderRemove(root,to_delete);
+        root->revInorderRemove(root,&to_delete);
     }
     //d'tor
     ~AVLTree() {
@@ -355,6 +361,7 @@ public:
         }
         int i = 0;
         root->FillNodeFromArrayInorder(&i,array);
+        min = root->updateMinRemove(root);
     }
 
     void inorderToArray(int amount,T* array){
