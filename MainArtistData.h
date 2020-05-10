@@ -10,14 +10,16 @@
 class MainArtistData{
     int id;
     int num_songs;
-    SongData* songs_array;
+    SongData** songs_array;
+    ListNode<StreamData>** stream_node_array;
 public:
-
-    MainArtistData (int artist_id, int num_songs): id(artist_id),num_songs(num_songs) {
+    MainArtistData (int artist_id): id(artist_id),num_songs(0){}
+    MainArtistData (int artist_id, int num_songs,ListNode<StreamData>* stream_node): id(artist_id),num_songs(num_songs) {
         songs_array = new SongData[num_songs];
         for(int i=0; i<num_songs; i++){
-            SongData new_song(i);
-            songs_array[i] = new_song;
+            SongData new_song(i,stream_node);
+            songs_array[i] = &new_song;
+            stream_node_array[i] = stream_node;
         }
     }
 
@@ -28,9 +30,14 @@ public:
     int getNumSongs(){
         return num_songs;
     }
-    SongData* getArray(){
+    SongData** getSongsArray(){
         return songs_array;
     }
+
+    ListNode<StreamData>** getNodesArray(){
+        return stream_node_array;
+    }
+
     void updateStreamsToZero(ListNode<StreamData>* stream_node){
         for(int i=0;i<num_songs;i++){
             songs_array[i].setStreamNode(stream_node);

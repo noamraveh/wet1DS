@@ -23,7 +23,7 @@ typedef enum {
 template<class T>
 class TreeNode{
 private:
-    T data;
+    T* data;
     TreeNode* l_son;
     TreeNode* r_son;
     TreeNode* parent;
@@ -31,7 +31,7 @@ private:
 public:
     //c'tors
     TreeNode() = default;
-    explicit TreeNode(const T& data):data(data),l_son(nullptr), r_son(nullptr), parent(
+    explicit TreeNode(T* data):data(data),l_son(nullptr), r_son(nullptr), parent(
             nullptr),height(1){}
     //d'tor
     ~TreeNode() {
@@ -41,7 +41,6 @@ public:
         if (r_son) {
             delete r_son;
         }
-
 
     }
     //update height
@@ -120,13 +119,13 @@ public:
         return this;
     }
     //nodeExists
-    bool nodeExists(const T& search_data){
-        if (search_data == data){
+    bool nodeExists(T* search_data){
+        if (*search_data == *data){
             return true;
         }
         if (!l_son && !r_son)
             return false;
-        else if (search_data < data) {
+        else if (*search_data < *data) {
             if (l_son == nullptr) {
                 return false;
             }
@@ -141,8 +140,8 @@ public:
     }
 
     //insert
-    TreeNode* insertNode(const T &add_data) {
-        if (add_data < data) {
+    TreeNode* insertNode(T* add_data) {
+        if (*add_data < *data) {
             if (l_son == nullptr) {
                 l_son = new TreeNode(add_data);
                 l_son->parent = this;
@@ -172,10 +171,10 @@ public:
     //remove_node
     TreeNode* removeNode( const T &search_data) {
 
-        if (search_data < data){
+        if (*search_data < *data){
             l_son = l_son->removeNode(search_data);
         }
-        else if (search_data > data){
+        else if (*search_data > *data){
             r_son = r_son->removeNode(search_data);
         }
             //wanted node was found
@@ -235,13 +234,13 @@ public:
     }
 
     T* findDataNode(T* search_data){
-        if (data == search_data){
+        if (*data == *search_data){
             return data;
         }
         if (!r_son && !l_son){
             return nullptr;
         }
-        else if (search_data < data){
+        else if (*search_data < *data){
             return l_son->findDataNode(search_data);
         }
         else {
@@ -264,12 +263,12 @@ public:
         return smallest;
     }
 
-    TreeNode*  buildSubtree(int height){
-        if (height == 0)
+    TreeNode*  buildSubtree(int h){
+        if (h == 0)
             return nullptr;
         auto node = new TreeNode();
-        node->l_son = buildSubtree(height-1);
-        node->r_son = buildSubtree(height-1);
+        node->l_son = buildSubtree(h-1);
+        node->r_son = buildSubtree(h-1);
         return node;
     }
 
@@ -315,7 +314,7 @@ public:
         delete root;
     }
     //insert
-    TreeNode<T>* insert(T data){
+    void insert(T* data){
         if (root == nullptr){
             root = new TreeNode<T>(data);
             num_of_nodes++;
@@ -328,11 +327,11 @@ public:
         }
         //throw success
         //else throw node exists
-        return ;
+        return;
     }
 
     //remove
-    void remove(T data){
+    void remove(T* data){
 
         if (!root || !root->nodeExists(data)){
             return; //throw node does not exist
@@ -344,7 +343,7 @@ public:
         //success
     }
     //findData
-    T* findData(T search_data){
+    T* findData(T* search_data){
         if (root == nullptr){
             return nullptr;
         }
@@ -357,7 +356,7 @@ public:
         root->inorderTraverse(root);
     }
 
-    void fillTreeFromArray(T* array){
+    void fillTreeFromArray(T** array){
         if (!array){
             return;
         }
@@ -366,12 +365,16 @@ public:
         min = root->updateMinRemove(root);
     }
 
-    void inorderToArray(int amount,T* array){
+    void inorderToArray(int amount,T** array){
         if (root == nullptr){
             return;
         }
         int i=0;
         root->inorderFillArray(i, amount, array);
+    }
+
+    TreeNode<T>* getRoot(){
+        return root;
     }
 
 

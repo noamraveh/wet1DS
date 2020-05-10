@@ -5,7 +5,7 @@
 #ifndef WET1DS_STREAMDATA_H
 #define WET1DS_STREAMDATA_H
 
-#include "AVLtree.h"
+#include "FinalAVLTree.h"
 #include "ArtistData.h"
 
 class StreamData{

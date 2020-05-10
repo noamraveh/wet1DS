@@ -11,20 +11,19 @@
 class SongData{
     int id;
     ListNode<StreamData>* stream_node; //linked list node
-//    int num_streams;
 public:
-    //SongData() = default
-    SongData(int id=0):id(id),stream_node(nullptr){};
-    ~Song() {
-        this = nullptr;
+    SongData(int id=0):id(id),stream_node(nullptr){}
+    SongData(int id,ListNode<StreamData> * new_stream_node):id(id),stream_node(new_stream_node){}
+    ~SongData() = default;
+
+    SongData (SongData & song) = default;
+    SongData &operator=(SongData &song) = delete;
+    bool operator>(const SongData &song){
+        return id > song.id;
     }
-    int getSongID();
-    ArtistData* getArtist();
-    int getNumStreams();
-    Song (Song & song) = def    ault;
-    Song &operator=(Song &song) = delete;
-    bool operator>(const Song &song);
-    bool operator==(const Song &song);
+    bool operator==(const SongData &song){
+        return id == song.id;
+    }
     ListNode<StreamData>* getStreamNode(){
         return stream_node;
     }
@@ -36,10 +35,6 @@ public:
     //SongData():id(0) {}
 };
 
-Song::Song(int id):id(id) {}
 
-Song::Song() {
-
-}
 
 #endif //WET1DS_SONGDATA_H

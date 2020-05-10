@@ -7,15 +7,12 @@
 
 #include "FinalAVLTree.h"
 #include "SongData.h"
-#include "LinkedList.h"
-#include "StreamData.h"
-#include "MainArtistData.h"
-
 class ArtistData{
 private:
     int artist_id;
     AVLTree<SongData>* songs_tree;
 public:
+    explicit ArtistData (int id): artist_id(id){}
     ArtistData(int i,int size) : artist_id(i),songs_tree(size) {}
 
     void createSongsTreeFromArr(SongData* array){
@@ -24,6 +21,12 @@ public:
 
     ~ArtistData() = default;
 
+    bool operator <(const ArtistData & artist_data){
+        return artist_id < artist_data.artist_id;
+    }
+    bool operator ==(const ArtistData & artist_data){
+        return artist_id == artist_data.artist_id;
+    }
 
     AVLTree<SongData> *getSongsTree() {
         return songs_tree;

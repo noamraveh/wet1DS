@@ -9,10 +9,10 @@
 template <class T>
 class ListNode{
 public:
-    T data;
+    T* data;
     ListNode* next;
     ListNode* prev;
-    explicit ListNode(T data):data(data),next(nullptr),prev(nullptr){}
+    explicit ListNode(T* data):data(data),next(nullptr),prev(nullptr){}
     ListNode() = default;
     ~ListNode() = default;
 };
@@ -53,7 +53,7 @@ public:
         return last;
     }
     //insert first
-    ListNode<T>* InsertFirst(T data){
+    ListNode<T>* InsertFirst(T* data){
         auto node = new ListNode<T>(data);
         if (isEmpty()){
             first = node;
@@ -65,7 +65,7 @@ public:
             return nullptr;
     }
     //InsertNode
-    ListNode<T>* InsertNode(ListNode<T>& curNode,T data){
+    ListNode<T>* InsertNode(ListNode<T>& curNode,T* data){
         auto node = new ListNode<T>(data);
 
         if (curNode != last) { //middle
