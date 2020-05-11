@@ -2,7 +2,7 @@
 // Created by Noam Raveh on 10/05/2020.
 //
 
-#include "Library1.h"
+#include "library1.h"
 #include "Diesel.h"
 
 void *Init(){
@@ -45,4 +45,9 @@ StatusType GetRecommendedSongs(void *DS, int numOfSongs, int *artists, int *song
     return ((Diesel*)DS)->GetRecommendedSongs(numOfSongs,artists,songs);
 }
 */
-void Quit(void** DS);
+void Quit(void** DS){
+    if(*DS != nullptr){
+        delete ((Diesel *)*DS);
+        *DS = nullptr;
+    }
+}

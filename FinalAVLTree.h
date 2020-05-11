@@ -173,7 +173,7 @@ public:
 
 
             //wanted node was found
-        if (search_data == data) {
+        if (*search_data == *data) {
             if (!l_son || !r_son) { //1 or 0 children
                 TreeNode *temp = l_son ? l_son : r_son;
                 if (!temp) { // no children
@@ -191,7 +191,7 @@ public:
                 r_son = r_son->removeNode(temp->data);
             }
         }
-        else if (search_data < data){
+        else if (*search_data < *data){
             l_son = l_son->removeNode(search_data);
         }
         else {

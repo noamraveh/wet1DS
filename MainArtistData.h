@@ -25,14 +25,15 @@ public:
         stream_node_array = new ListNode<StreamData>*[num_songs];
         artist_data_array = new ArtistData*[num_songs];
         for(int i=0; i<num_songs; i++){
-            SongData new_song(i,stream_node);
-            songs_array[i] = &new_song;
+            SongData* new_song = new SongData(i,stream_node);
+            songs_array[i] = new_song;
             stream_node_array[i] = stream_node;
         }
     }
     ~MainArtistData(){
         delete[] songs_array; //everything else was deleted by this point
-
+        delete[] stream_node_array;
+        delete[] artist_data_array;
     }
 
     int getNumSongs(){

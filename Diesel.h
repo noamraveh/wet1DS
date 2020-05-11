@@ -8,7 +8,7 @@
 #include "MainArtistData.h"
 #include "StreamData.h"
 #include "ArtistData.h"
-#include "Library1.h"
+#include "library1.h"
 #include "LinkedList.h"
 #include "FinalAVLTree.h"
 #include "SongData.h"
@@ -19,8 +19,8 @@ class Diesel {
     AVLTree<ArtistData>* zero_streams_tree;
 public:
     Diesel() {
-        StreamData zero_streams_data(0);
-        num_streams_list.InsertFirst(&zero_streams_data);
+        auto* zero_streams_data = new StreamData(0);
+        num_streams_list.InsertFirst(zero_streams_data);
         zero_streams_tree = num_streams_list.getFirstNode()->data->artists_tree;
     };
 
@@ -32,20 +32,20 @@ public:
             return INVALID_INPUT;
 
         //add to main all_artists_tree and fill array with songs
-        MainArtistData main_artist_data(artistID, numOfSongs,num_streams_list.getFirstNode());
-        all_artists_tree.insert(&main_artist_data);
+        auto* main_artist_data = new MainArtistData(artistID, numOfSongs,num_streams_list.getFirstNode());
+        all_artists_tree.insert(main_artist_data);
 
         //add linked list node ptr to each song
     //    main_artist_data.updateStreamsToZero(num_streams_list.getFirstNode());
 
         //create artist node with songs tree
-        SongData** created_array = all_artists_tree.findData(&main_artist_data)->getSongsArray();
-        ArtistData new_artist(artistID,numOfSongs);
-        new_artist.createSongsTreeFromArr(created_array);
-        main_artist_data.initArtistDataArray(&new_artist);
+        SongData** created_array = all_artists_tree.findData(main_artist_data)->getSongsArray();
+        auto* new_artist = new ArtistData(artistID,numOfSongs);
+        new_artist->createSongsTreeFromArr(created_array);
+        main_artist_data->initArtistDataArray(new_artist);
 
         //add node to zero streams tree
-        zero_streams_tree->insert(&new_artist);
+        zero_streams_tree->insert(new_artist);
 
         return SUCCESS;
     }
@@ -100,9 +100,9 @@ public:
         //check if streams+1 node exists if it doesn't - create listNode
         int current_stream_num = found_stream_node->data->getNumStreams();
         ListNode<StreamData>* next_node = num_streams_list.getNextNode(found_stream_node);
-        if (next_node->data->getNumStreams() != current_stream_num + 1){
-            StreamData next_stream_num(current_stream_num + 1);
-            next_node = num_streams_list.InsertNode(found_stream_node,&next_stream_num);
+        if (num_streams_list.getLastNode() ==  found_stream_node || next_node->data->getNumStreams() != current_stream_num + 1){
+            auto* next_stream_num = new StreamData(current_stream_num + 1);
+            next_node = num_streams_list.InsertNode(found_stream_node,next_stream_num);
         }
         //remove song from current tree
         ArtistData search_artist(artistID);
@@ -119,24 +119,28 @@ public:
             num_streams_list.removeNode(found_stream_node);
         }
         //if needed add artist to artist tree, then add song to song tree
-        SongData to_add_song(songID,next_node);
+        SongData* to_add_song = new SongData(songID,next_node);
 
         AVLTree<ArtistData>* to_add_tree = next_node->data->artists_tree;
         ArtistData* add_artist = to_add_tree->findData(&search_artist);
         if (!add_artist){
-            to_add_tree->insert(&search_artist);
-            ArtistData* added_artist = to_add_tree->findData(&search_artist);
-            added_artist->getSongsTree()->insert(&to_add_song);
+            ArtistData* to_add_artist = new ArtistData(artistID);
+            to_add_tree->insert(to_add_artist);
+            ArtistData* added_artist = to_add_tree->findData(to_add_artist);
+            added_artist->getSongsTree()->insert(to_add_song);
             found_artist->updateArtistData(songID,added_artist); // update artistData array
         }
         else{
-            add_artist->getSongsTree()->insert(&to_add_song);
+            add_artist->getSongsTree()->insert(to_add_song);
             found_artist->updateArtistData(songID,add_artist);// update artistData array
         }
 
         //update array ptr in main tree
-        found_artist->getSongsArray()[songID] = &to_add_song;
+
+        found_artist->getSongsArray()[songID] = to_add_song;
         found_artist->getNodesArray()[songID] = next_node;
+
+        return SUCCESS;
     }
 
     StatusType NumberOfStreams(int artistID, int songID, int *streams){
@@ -154,6 +158,7 @@ public:
     }
 
     //StatusType GetRecommendedSongs( int numOfSongs, int *artists, int *songs);
+
 };
 
 

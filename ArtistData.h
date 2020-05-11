@@ -13,7 +13,9 @@ private:
     int artist_id;
     AVLTree<SongData>* songs_tree;
 public:
-    explicit ArtistData (int id): artist_id(id),songs_tree(nullptr){}
+    explicit ArtistData (int id): artist_id(id),songs_tree(nullptr){
+        songs_tree = new AVLTree<SongData>();
+    }
     ArtistData(int i,int size) : artist_id(i),songs_tree(nullptr) {
         songs_tree = new AVLTree<SongData>(size);
 
@@ -31,6 +33,7 @@ public:
     bool operator ==(const ArtistData & artist_data){
         return artist_id == artist_data.artist_id;
     }
+
     AVLTree<SongData>* getSongsTree() {
         return songs_tree;
     }
