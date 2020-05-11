@@ -73,7 +73,7 @@ public:
     }
 
     int getNumStreams(int song_id){
-        if (song_id>num_songs)
+        if (song_id>=num_songs)
             return -1;
         return songs_array[song_id]->getNumStreams();
     }

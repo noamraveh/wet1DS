@@ -16,15 +16,9 @@
 class Diesel {
     AVLTree<MainArtistData> all_artists_tree;
     LinkedList<StreamData> num_streams_list;
-    AVLTree<ArtistData>* zero_streams_tree;
+    int total_song_count;
 public:
-    Diesel() {
-        auto zero_streams_data = new StreamData(0);
-        //MainArtistData* main_f = new MainArtistData(123);
-        //all_artists_tree.insert(main_f);
-        num_streams_list.InsertFirst(zero_streams_data);
-        zero_streams_tree = num_streams_list.getFirstNode()->data->artists_tree;
-    };
+    Diesel():total_song_count(0){}
 
     ~Diesel() = default;
 
@@ -33,12 +27,18 @@ public:
         if (artistID<=0 || numOfSongs<=0)
             return INVALID_INPUT;
 
+        MainArtistData temp(artistID);
+        if (all_artists_tree.findData(&temp))
+            return FAILURE;
+        //if first artist - create zero streams node
+        if(num_streams_list.isEmpty()){
+            auto zero_streams_data = new StreamData(0);
+            num_streams_list.InsertFirst(zero_streams_data);
+        }
         //add to main all_artists_tree and fill array with songs
         auto main_artist_data = new MainArtistData(artistID, numOfSongs,num_streams_list.getFirstNode());
         all_artists_tree.insert(main_artist_data);
 
-        //add linked list node ptr to each song
-    //    main_artist_data.updateStreamsToZero(num_streams_list.getFirstNode());
 
         //create artist node with songs tree
         SongData** created_array = all_artists_tree.findData(main_artist_data)->getSongsArray();
@@ -46,9 +46,10 @@ public:
         new_artist->createSongsTreeFromArr(created_array);
         main_artist_data->initArtistDataArray(new_artist);
 
-        //add node to zero streams tree
-        zero_streams_tree->insert(new_artist);
 
+        //add node to zero streams tree
+        num_streams_list.getFirstNode()->data->artists_tree->insert(new_artist);
+        total_song_count += numOfSongs;
         return SUCCESS;
     }
 
@@ -67,7 +68,9 @@ public:
 
         //go over songs array, for each song delete artist node (will delete songs tree also)
         for (int i = 0; i < numSongs; i++){
-            arr[i]->data->artists_tree->remove(&delete_artist);
+            ArtistData* found_artist = arr[i]->data->artists_tree->findData(&delete_artist);
+            if (found_artist)
+                arr[i]->data->artists_tree->remove(found_artist);
             if (arr[i]->data->artists_tree->getRoot() == nullptr) {
                 listNodesFlagsArray[i]= 1; //needs to be deleted afterwards
             }
@@ -82,6 +85,7 @@ public:
         }
         delete[] listNodesFlagsArray;
         all_artists_tree.remove(found_data);
+        total_song_count-=numSongs;
         return SUCCESS;
     }
 
@@ -161,6 +165,40 @@ public:
 
     //StatusType GetRecommendedSongs( int numOfSongs, int *artists, int *songs);
 
+    StatusType GetRecommendedSongs(int to_print, int *artists, int *songs) {
+        if (to_print <= 0)
+            return INVALID_INPUT;
+        if (to_print > total_song_count)
+            return FAILURE;
+        int i = 0;
+        ListNode<StreamData> *current_node = num_streams_list.getLastNode();
+        while (current_node) {
+            current_node->data->artists_tree->resetCurrentPrev();
+            TreeNode<ArtistData> *current_artist = current_node->data->artists_tree->getCurrent();
+            while (current_artist) {
+                current_artist->getData()->getSongsTree()->resetCurrentPrev();
+                TreeNode<SongData> *current_song = current_artist->getData()->getSongsTree()->getCurrent();
+                while (current_song) {
+                    if (i >= to_print) {
+                        current_artist->getData()->getSongsTree()->resetCurrentPrev();
+                        current_node->data->artists_tree->resetCurrentPrev();
+                        return SUCCESS;
+                    }
+                    artists[i] = current_artist->getData()->getArtistID();
+                    songs[i] = current_song->getData()->getSongID();
+                    i++;
+                    current_artist->getData()->getSongsTree()->updatePrevCurrent();
+                    current_song = current_artist->getData()->getSongsTree()->getCurrent();
+                }
+                current_artist->getData()->getSongsTree()->resetCurrentPrev();
+                current_node->data->artists_tree->updatePrevCurrent();
+                current_artist = current_node->data->artists_tree->getCurrent();
+            }
+            current_node->data->artists_tree->resetCurrentPrev();
+            current_node = num_streams_list.getPrevNode(current_node);
+        }
+        return SUCCESS;
+    }
 };
 
 

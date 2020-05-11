@@ -16,7 +16,9 @@ public:
     explicit StreamData(int num): num_of_streams(num){
         artists_tree = new AVLTree<ArtistData>();
     }
-    ~StreamData() = default;
+    ~StreamData() {
+       delete artists_tree;
+    }
 
     int getNumStreams() {
         return num_of_streams;

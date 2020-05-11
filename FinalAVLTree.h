@@ -38,10 +38,22 @@ public:
         if (l_son) {
             delete l_son;
         }
+        delete data;
         if (r_son) {
             delete r_son;
         }
+    }
 
+    T* getData(){
+        return data;
+    }
+    TreeNode* getLeft(){
+        return l_son;
+    }
+    TreeNode* getRight(){
+        return r_son;
+    }TreeNode* getParent(){
+        return parent;
     }
     //update height
     void updateHeight(){
@@ -187,8 +199,10 @@ public:
                 delete temp;
             } else { //2 children
                 TreeNode *temp = r_son->getSuccessor();
-                data = temp->data;
-                r_son = r_son->removeNode(temp->data);
+                T* temp_data = temp->data;
+                temp->data = data;
+                data = temp_data;
+                r_son = r_son->removeNode(search_data);
             }
         }
         else if (*search_data < *data){
@@ -232,6 +246,14 @@ public:
         if (l_son){
             l_son->inorderFillArray(amount, array);
         }
+    }
+
+    void postOrderUpdateHeights(TreeNode* node){
+        if (!node)
+            return;
+        postOrderUpdateHeights(node->l_son);
+        postOrderUpdateHeights(node->r_son);
+        node->updateHeight();
     }
 
     T* findDataNode(T* search_data){
@@ -295,11 +317,15 @@ private:
     TreeNode<T> *root;
     TreeNode<T> *min;
     int num_of_nodes;
+    TreeNode<T> *prev;
+    TreeNode<T> *current;
 public:
     //c'tor
-    AVLTree() : root(nullptr), min(nullptr), num_of_nodes(0) {}
+    AVLTree() : root(nullptr), min(nullptr), num_of_nodes(0),prev(nullptr),current(
+            nullptr) {}
     //c'tor for empty tree
-    explicit AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size) {
+    explicit AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size),prev(nullptr),current(
+            nullptr) {
         //create full tree
         int height = ceil(log(size))+1;
         auto* temp = new TreeNode<T>();
@@ -308,6 +334,7 @@ public:
         //remove redundant leaves
         int to_delete = pow(2,height)-1 - size;
         root->revInorderRemove(root,&to_delete);
+        root->postOrderUpdateHeights(root);
     }
     //d'tor
     ~AVLTree() {
@@ -388,13 +415,36 @@ public:
     TreeNode<T>* getRoot(){
         return root;
     }
+    TreeNode<T>* getPrev(){
+        return prev;
+    }
+    TreeNode<T>* getCurrent(){
+        return current;
+    }
+    void updatePrevCurrent(){
+        if (!current){
+            current = min;
+            prev = nullptr;
+        }
+        if (current->getLeft() == prev){
+            prev = current;
+            if (!current->getRight())
+                current = current->getParent();
+            else
+                current = current->getRight()->getSuccessor();
+            return;
+        }
+        else {
+            prev = current;
+            current = current->getParent();
+            return;
+        }
+    }
 
-
-
-
-
-
-
+    void resetCurrentPrev(){
+        current = min;
+        prev = nullptr;
+    }
 };
 
 #endif //WET1DS_FINALAVLTREE_H

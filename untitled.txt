@@ -1,2 +1,4 @@
 Init
+AddArtist 123 3
+AddArtist 124 4
 Quit

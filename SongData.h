@@ -31,6 +31,9 @@ public:
         return stream_node->data->getNumStreams();
     }
 
+    int getSongID(){
+        return id;
+    }
     void setStreamNode(ListNode<StreamData> *new_stream_node) {
         stream_node = new_stream_node;
     }

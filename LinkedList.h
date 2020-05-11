@@ -14,7 +14,9 @@ public:
     ListNode* prev;
     explicit ListNode(T* data):data(data),next(nullptr),prev(nullptr){}
     ListNode() = default;
-    ~ListNode() = default;
+    ~ListNode(){
+        delete data;
+    }
 };
 
 template <class T>

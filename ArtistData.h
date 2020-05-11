@@ -25,7 +25,9 @@ public:
         songs_tree->fillTreeFromArray(array);
     }
 
-    ~ArtistData() = default;
+    ~ArtistData() {
+        delete songs_tree;
+    }
 
     bool operator < (ArtistData & artist_data){
         return artist_id < artist_data.artist_id;
@@ -36,6 +38,10 @@ public:
 
     AVLTree<SongData>* getSongsTree() {
         return songs_tree;
+    }
+
+    int getArtistID(){
+        return artist_id;
     }
 };
 

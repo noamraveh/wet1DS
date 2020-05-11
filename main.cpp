@@ -125,7 +125,7 @@ static errorType OnAddArtist(void* DS, const char* const command);
 static errorType OnRemoveArtist(void* DS, const char* const command);
 static errorType OnAddToSongCount(void* DS, const char* const command);
 static errorType OnNumberOfStreams(void* DS, const char* const command);
-//static errorType OnGetRecommendedSongs(void* DS, const char* const command);
+static errorType OnGetRecommendedSongs(void* DS, const char* const command);
 static errorType OnQuit(void** DS, const char* const command);
 
 /***************************************************************************/
@@ -156,8 +156,8 @@ static errorType parser(const char* const command) {
         case (NUMBEROFSTREAMS_CMD):
             rtn_val = OnNumberOfStreams(DS, command_args);
             break;
-       // case (GETRECOMMENDEDSONGS_CMD):
-        //    rtn_val = OnGetRecommendedSongs(DS, command_args);
+        case (GETRECOMMENDEDSONGS_CMD):
+            rtn_val = OnGetRecommendedSongs(DS, command_args);
             break;
         case (QUIT_CMD):
             rtn_val = OnQuit(&DS, command_args);
@@ -250,7 +250,7 @@ static errorType OnNumberOfStreams(void* DS, const char* const command) {
     printf("%s: %d\n", commandStr[NUMBEROFSTREAMS_CMD], streams);
     return error_free;
 }
-/*
+
 static errorType OnGetRecommendedSongs(void* DS, const char* const command) {
     int numOfSongs;
     int *artists, *songs;
@@ -290,7 +290,7 @@ static errorType OnGetRecommendedSongs(void* DS, const char* const command) {
 
     return error_free;
 }
-*/
+
 static errorType OnQuit(void** DS, const char* const command) {
     Quit(DS);
     if (*DS != NULL) {

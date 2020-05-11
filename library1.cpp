@@ -37,14 +37,14 @@ StatusType NumberOfStreams(void *DS, int artistID, int songID, int *streams){
 
     return ((Diesel*)DS)->NumberOfStreams(artistID,songID,streams);
 }
-/*
+
 StatusType GetRecommendedSongs(void *DS, int numOfSongs, int *artists, int *songs){
     if(DS == nullptr)
         return INVALID_INPUT;
 
     return ((Diesel*)DS)->GetRecommendedSongs(numOfSongs,artists,songs);
 }
-*/
+
 void Quit(void** DS){
     if(*DS != nullptr){
         delete ((Diesel *)*DS);
