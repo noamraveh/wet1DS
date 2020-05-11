@@ -19,7 +19,9 @@ class Diesel {
     AVLTree<ArtistData>* zero_streams_tree;
 public:
     Diesel() {
-        auto* zero_streams_data = new StreamData(0);
+        auto zero_streams_data = new StreamData(0);
+        //MainArtistData* main_f = new MainArtistData(123);
+        //all_artists_tree.insert(main_f);
         num_streams_list.InsertFirst(zero_streams_data);
         zero_streams_tree = num_streams_list.getFirstNode()->data->artists_tree;
     };
@@ -32,7 +34,7 @@ public:
             return INVALID_INPUT;
 
         //add to main all_artists_tree and fill array with songs
-        auto* main_artist_data = new MainArtistData(artistID, numOfSongs,num_streams_list.getFirstNode());
+        auto main_artist_data = new MainArtistData(artistID, numOfSongs,num_streams_list.getFirstNode());
         all_artists_tree.insert(main_artist_data);
 
         //add linked list node ptr to each song
@@ -40,7 +42,7 @@ public:
 
         //create artist node with songs tree
         SongData** created_array = all_artists_tree.findData(main_artist_data)->getSongsArray();
-        auto* new_artist = new ArtistData(artistID,numOfSongs);
+        auto new_artist = new ArtistData(artistID,numOfSongs);
         new_artist->createSongsTreeFromArr(created_array);
         main_artist_data->initArtistDataArray(new_artist);
 
@@ -101,7 +103,7 @@ public:
         int current_stream_num = found_stream_node->data->getNumStreams();
         ListNode<StreamData>* next_node = num_streams_list.getNextNode(found_stream_node);
         if (num_streams_list.getLastNode() ==  found_stream_node || next_node->data->getNumStreams() != current_stream_num + 1){
-            auto* next_stream_num = new StreamData(current_stream_num + 1);
+            auto next_stream_num = new StreamData(current_stream_num + 1);
             next_node = num_streams_list.InsertNode(found_stream_node,next_stream_num);
         }
         //remove song from current tree
