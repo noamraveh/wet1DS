@@ -97,6 +97,8 @@ public:
         MainArtistData* found_artist = all_artists_tree.findData(&wanted_artist);
         if (!found_artist)
             return FAILURE;
+        if(found_artist->getNumSongs()<songID)
+            return INVALID_INPUT;
         SongData* found_song = found_artist->getSongData(songID);
         if (!found_song){
             return FAILURE;

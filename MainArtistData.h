@@ -79,8 +79,9 @@ public:
     }
 
     SongData* getSongData(int song_id){
-        if (song_id>num_songs)
+        if (song_id>=num_songs){
             return nullptr;
+        }
         return songs_array[song_id];
     }
 };

@@ -173,11 +173,17 @@ public:
             }
         }
     }
-    TreeNode* getSuccessor() {
+    TreeNode* getSuccessorL() {
         if (l_son == nullptr) {
             return this;
         }
-        return l_son->getSuccessor();
+        return l_son->getSuccessorL();
+    }
+    TreeNode* getSuccessorR() {
+        if (r_son == nullptr) {
+            return this;
+        }
+        return r_son->getSuccessorR();
     }
 
     //remove_node
@@ -186,19 +192,24 @@ public:
 
             //wanted node was found
         if (*search_data == *data) {
-            if (!l_son || !r_son) { //1 or 0 children
-                TreeNode *temp = l_son ? l_son : r_son;
-                if (!temp) { // no children
-                    delete this;
-                    return nullptr;
-                } else { // has one child
-                    TreeNode* parent_ptr = this->parent;
-                    *this = *temp;
-                    this->parent=parent_ptr;
-                }
-                delete temp;
+            if (!l_son && !r_son) { //0 children
+                delete this;
+                return nullptr;
+            }
+            else if (!r_son){
+                TreeNode* next_r = l_son->getSuccessorR();
+                T* next_r_data = next_r->data;
+                next_r->data = data;
+                data = next_r_data;
+                l_son = l_son->removeNode(search_data);
+            } else if (!l_son){
+                TreeNode* next_l = r_son->getSuccessorL();
+                T* next_l_data = next_l->data;
+                next_l->data = data;
+                data = next_l_data;
+                    r_son = r_son->removeNode(search_data);
             } else { //2 children
-                TreeNode *temp = r_son->getSuccessor();
+                TreeNode *temp = r_son->getSuccessorL();
                 T* temp_data = temp->data;
                 temp->data = data;
                 data = temp_data;
@@ -257,16 +268,20 @@ public:
     }
 
     T* findDataNode(T* search_data){
-        if (*data == *search_data){
+        if (* data == * search_data){
             return data;
         }
         if (!r_son && !l_son){
             return nullptr;
         }
         else if (*search_data < *data){
+            if (!l_son)
+                return nullptr;
             return l_son->findDataNode(search_data);
         }
         else {
+            if (!r_son)
+                return nullptr;
             return r_son->findDataNode(search_data);
         }
     }
@@ -280,7 +295,7 @@ public:
     TreeNode* updateMinRemove(TreeNode* root) {
         if (!root)
             return nullptr;
-        TreeNode* smallest = root->getSuccessor();
+        TreeNode* smallest = root->getSuccessorL();
         if (smallest == this)
             return this;
         return smallest;
@@ -431,7 +446,7 @@ public:
             if (!current->getRight())
                 current = current->getParent();
             else
-                current = current->getRight()->getSuccessor();
+                current = current->getRight()->getSuccessorL();
             return;
         }
         else {
