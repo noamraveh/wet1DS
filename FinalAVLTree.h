@@ -38,7 +38,7 @@ public:
         if (l_son) {
             delete l_son;
         }
-        delete data;
+       // delete data;
         if (r_son) {
             delete r_son;
         }
@@ -342,14 +342,19 @@ public:
     explicit AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size),prev(nullptr),current(
             nullptr) {
         //create full tree
-        int height = ceil(log(size))+1;
+        double height_non_ceil = log2(size);
+        double height = ceil(log2(size));
+        if (height == height_non_ceil)
+            height ++;
         auto* temp = new TreeNode<T>();
         root = temp -> buildSubtree(height);
         delete temp;
+        root->postOrderUpdateHeights(root);
+
         //remove redundant leaves
+       // int power = pow(2,height-1);
         int to_delete = pow(2,height)-1 - size;
         root->revInorderRemove(root,&to_delete);
-        root->postOrderUpdateHeights(root);
     }
     //d'tor
     ~AVLTree() {
