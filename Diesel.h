@@ -131,12 +131,10 @@ StatusType Diesel::AddToSongCount(int artistID, int songID) {
                 &wanted_artist);
         if (!found_artist)
             return FAILURE;
-        if (found_artist->getNumSongs() < songID)
+        if ( songID >= found_artist->getNumSongs())
             return INVALID_INPUT;
         SongData *found_song = found_artist->getSongData(songID);
-        if (!found_song) {
-            return FAILURE;
-        }
+
         ListNode<StreamData> *found_stream_node = found_song->getStreamNode();
 
         //check if streams+1 node exists if it doesn't - create listNode
