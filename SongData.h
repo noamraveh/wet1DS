@@ -14,7 +14,9 @@ class SongData{
 public:
     SongData(int id=0):id(id),stream_node(nullptr){}
     SongData(int id,ListNode<StreamData> * new_stream_node):id(id),stream_node(new_stream_node){}
-    ~SongData() = default;
+    ~SongData() {
+        stream_node = nullptr;
+    }
 
     SongData (SongData & song) = default;
     SongData &operator=(SongData &song) = delete;

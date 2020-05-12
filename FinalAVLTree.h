@@ -38,7 +38,7 @@ public:
         if (l_son) {
             delete l_son;
         }
-       // delete data;
+        delete data;
         if (r_son) {
             delete r_son;
         }
