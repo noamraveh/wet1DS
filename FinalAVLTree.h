@@ -332,14 +332,13 @@ private:
     TreeNode<T> *root;
     TreeNode<T> *min;
     int num_of_nodes;
-    TreeNode<T> *prev;
     TreeNode<T> *current;
 public:
     //c'tor
-    AVLTree() : root(nullptr), min(nullptr), num_of_nodes(0),prev(nullptr),current(
+    AVLTree() : root(nullptr), min(nullptr), num_of_nodes(0),current(
             nullptr) {}
     //c'tor for empty tree
-    explicit AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size),prev(nullptr),current(
+    explicit AVLTree(int size) :  root(nullptr),min(nullptr), num_of_nodes(size),current(
             nullptr) {
         //create full tree
         double height_non_ceil = log2(size);
@@ -435,35 +434,23 @@ public:
     TreeNode<T>* getRoot(){
         return root;
     }
-    TreeNode<T>* getPrev(){
-        return prev;
-    }
+
     TreeNode<T>* getCurrent(){
         return current;
     }
-    void updatePrevCurrent(){
-        if (!current){
-            current = min;
-            prev = nullptr;
-        }
-        if (current->getLeft() == prev){
-            prev = current;
-            if (!current->getRight())
-                current = current->getParent();
-            else
-                current = current->getRight()->getSuccessorL();
+    void updateCurrent(){
+        if (current->getRight() != nullptr){ // traveling right after root
+            current = current->getRight()->getSuccessorL();
             return;
         }
-        else {
-            prev = current;
+        while (current->getParent() != nullptr && current == current->getParent()->getRight()){ // going back up after right subtree
             current = current->getParent();
-            return;
         }
+        current = current->getParent();
     }
 
-    void resetCurrentPrev(){
+    void resetCurrent(){
         current = min;
-        prev = nullptr;
     }
 };
 
