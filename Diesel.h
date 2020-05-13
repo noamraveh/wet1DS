@@ -5,13 +5,10 @@
 #ifndef WET1DS_DIESEL_H
 #define WET1DS_DIESEL_H
 
-#include "MainArtistData.h"
-#include "StreamData.h"
-#include "ArtistData.h"
 #include "library1.h"
 #include "LinkedList.h"
 #include "FinalAVLTree.h"
-#include "SongData.h"
+#include "all_types.h"
 
 class Diesel {
     AVLTree<MainArtistData> all_artists_tree;

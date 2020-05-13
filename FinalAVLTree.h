@@ -247,12 +247,7 @@ public:
 
         return node;
     }
-    void treeClearNodes(TreeNode* node){
-        if (l_son)
-            delete l_son;
-        if (r_son)
-            delete r_son;
-    }
+
     void inorderFillArray(int amount,T* array){
         if (l_son){
             l_son->inorderFillArray(amount, array);
@@ -351,7 +346,6 @@ public:
         root->postOrderUpdateHeights(root);
 
         //remove redundant leaves
-       // int power = pow(2,height-1);
         int to_delete = pow(2,height)-1 - size;
         root->revInorderRemove(root,&to_delete);
     }
@@ -359,18 +353,6 @@ public:
     ~AVLTree() {
         delete root;
     }
-    //create almost full tree
-    /*AVLTree* almostFull(int size){
-        num_of_nodes = size;
-        int height = ceil(log(size))+1;
-        auto* temp = new TreeNode<T>();
-        root = temp->buildSubtree(height);
-        delete temp;
-        //remove redundant leaves
-        int to_delete = pow(2,height)-1 - size;
-        root->revInorderRemove(root,&to_delete);
-    }
-*/
     //insert
     void insert(T* data){
         if (root == nullptr){
@@ -421,14 +403,6 @@ public:
         int i = 0;
         root->FillNodeFromArrayInorder(&i,array);
         min = root->updateMinRemove(root);
-    }
-
-    void inorderToArray(int amount,T** array){
-        if (root == nullptr){
-            return;
-        }
-        int i=0;
-        root->inorderFillArray(i, amount, array);
     }
 
     TreeNode<T>* getRoot(){
