@@ -191,7 +191,7 @@ StatusType Diesel::AddToSongCount(int artistID, int songID) {
 }
 
 StatusType Diesel::NumberOfStreams(int artistID, int songID, int *streams) {
-    if (artistID<=0 || songID<0)
+    if (artistID<=0 || songID<0 || streams == nullptr)
         return INVALID_INPUT;
     try {
         MainArtistData search_data(artistID);
