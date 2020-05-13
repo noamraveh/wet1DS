@@ -180,8 +180,6 @@ StatusType Diesel::NumberOfStreams(int artistID, int songID, int *streams) {
 
 StatusType Diesel::GetRecommendedSongs(int to_print, int *artists, int *songs) {
     try {
-        if (to_print <= 0)
-            return INVALID_INPUT;
         if (to_print > total_song_count)
             return FAILURE;
         int i = 0;
