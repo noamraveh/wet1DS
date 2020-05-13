@@ -29,9 +29,6 @@ public:
 
     StatusType GetRecommendedSongs(int to_print, int *artists, int *songs);
 
-    class ErrorCodes : public std::exception {};
-
-    class ALLOCATION_ERROR : public ErrorCodes{};
 };
 
 #endif //WET1DS_DIESEL_H

@@ -34,7 +34,7 @@ StatusType Diesel::AddArtist(int artistID, int numOfSongs) {
         total_song_count += numOfSongs;
     }
     catch (std::bad_alloc &){
-        throw ALLOCATION_ERROR{};
+        return ALLOCATION_ERROR;
     }
     return SUCCESS;
 }
@@ -83,7 +83,7 @@ StatusType Diesel::RemoveArtist(int artistID) {
         total_song_count -= numSongs;
     }
     catch(std::bad_alloc &){
-        throw ALLOCATION_ERROR{};
+        return ALLOCATION_ERROR;
     }
     return SUCCESS;
 }
@@ -154,7 +154,7 @@ StatusType Diesel::AddToSongCount(int artistID, int songID) {
         found_artist->getNodesArray()[songID] = next_node;
     }
     catch (std::bad_alloc &){
-        throw ALLOCATION_ERROR{};
+        return ALLOCATION_ERROR;
     }
     return SUCCESS;
 }
@@ -173,7 +173,7 @@ StatusType Diesel::NumberOfStreams(int artistID, int songID, int *streams) {
         *streams = num_streams;
     }
     catch (std::bad_alloc &){
-        throw ALLOCATION_ERROR{};
+        return ALLOCATION_ERROR;
     }
     return SUCCESS;
 }
@@ -209,7 +209,7 @@ StatusType Diesel::GetRecommendedSongs(int to_print, int *artists, int *songs) {
         }
     }
     catch (std::bad_alloc &){
-        throw ALLOCATION_ERROR{};
+        return ALLOCATION_ERROR;
     }
     return SUCCESS;
 }
