@@ -25,8 +25,7 @@ private:
     int num_of_nodes;
     ListNode<T>* first;
     ListNode<T>* last;
-    friend class ArtistInfo;
-    
+
 public:
     //c'tor
     LinkedList(): num_of_nodes(0),first(nullptr),last(nullptr){}

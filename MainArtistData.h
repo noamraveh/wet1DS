@@ -18,72 +18,30 @@ class MainArtistData{
     ListNode<StreamData>** stream_node_array;
     ArtistData** artist_data_array;
 public:
-    explicit MainArtistData (int artist_id): id(artist_id),num_songs(0),songs_array(
-            nullptr),stream_node_array(nullptr),artist_data_array(nullptr){}
-    MainArtistData (int artist_id, int num_songs,ListNode<StreamData>* stream_node): id(artist_id),num_songs(num_songs) {
-        songs_array = new SongData*[num_songs];
-        stream_node_array = new ListNode<StreamData>*[num_songs];
-        artist_data_array = new ArtistData*[num_songs];
-        for(int i=0; i<num_songs; i++){
-            SongData* new_song = new SongData(i,stream_node);
-            songs_array[i] = new_song;
-            stream_node_array[i] = stream_node;
-        }
-    }
-    ~MainArtistData(){
-        delete[] songs_array; //everything else was deleted by this point
-        delete[] stream_node_array;
-        delete[] artist_data_array;
-    }
+    explicit MainArtistData (int artist_id);
 
-    int getNumSongs(){
-        return num_songs;
-    }
+    MainArtistData (int artist_id, int num_songs,ListNode<StreamData>* stream_node);
 
-    SongData** getSongsArray(){
-        return songs_array;
-    }
+    ~MainArtistData();
 
-    void updateArtistData(int songID ,ArtistData* artist){
-        artist_data_array[songID] = artist;
-    }
+    int getNumSongs();
 
-    void initArtistDataArray(ArtistData* artist){
-        for (int i=0 ; i<num_songs; i++){
-            updateArtistData(i,artist);
-        }
-    }
+    SongData** getSongsArray();
 
-    ListNode<StreamData>** getNodesArray(){
-        return stream_node_array;
-    }
+    void updateArtistData(int songID ,ArtistData* artist);
 
-    void updateStreamsToZero(ListNode<StreamData>* stream_node){
-        for(int i=0;i<num_songs;i++){
-            songs_array[i]->setStreamNode(stream_node);
-        }
+    void initArtistDataArray(ArtistData* artist);
 
-    }
-    bool operator <(const MainArtistData &artistInfo){
-        return id < artistInfo.id;
-    }
+    ListNode<StreamData>** getNodesArray();
 
-    bool operator ==(const MainArtistData &artistInfo){
-        return id == artistInfo.id;
-    }
 
-    int getNumStreams(int song_id){
-        if (song_id>=num_songs)
-            return -1;
-        return songs_array[song_id]->getNumStreams();
-    }
+    bool operator <(const MainArtistData &artistInfo);
 
-    SongData* getSongData(int song_id){
-        if (song_id>=num_songs){
-            return nullptr;
-        }
-        return songs_array[song_id];
-    }
+    bool operator ==(const MainArtistData &artistInfo);
+
+    int getNumStreams(int song_id);
+
+    SongData* getSongData(int song_id);
 };
 
 #endif //WET1DS_MAINARTISTDATA_H

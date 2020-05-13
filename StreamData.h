@@ -13,15 +13,12 @@ class StreamData{
     AVLTree<ArtistData> *artists_tree;
     friend class Diesel;
 public:
-    explicit StreamData(int num): num_of_streams(num){
-        artists_tree = new AVLTree<ArtistData>();
-    }
-    ~StreamData() {
-       delete artists_tree;
-    }
 
-    int getNumStreams() {
-        return num_of_streams;
-    }
+    explicit StreamData(int num);
+
+    ~StreamData();
+
+    int getNumStreams();
 };
+
 #endif //WET1DS_STREAMDATA_H

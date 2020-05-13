@@ -5,6 +5,8 @@
 #ifndef WET1DS_ARTISTDATA_H
 #define WET1DS_ARTISTDATA_H
 
+#include "FinalAVLTree.h"
+
 class SongData;
 
 
@@ -13,37 +15,21 @@ private:
     int artist_id;
     AVLTree<SongData>* songs_tree;
 public:
-    explicit ArtistData (int id): artist_id(id),songs_tree(nullptr){
-        songs_tree = new AVLTree<SongData>();
-    }
-    ArtistData(int i,int size) : artist_id(i),songs_tree(nullptr) {
-        songs_tree = new AVLTree<SongData>(size);
+    explicit ArtistData (int id);
+    ArtistData(int i,int size);
 
-    }
+    void createSongsTreeFromArr(SongData** array);
 
-    void createSongsTreeFromArr(SongData** array){
-        songs_tree->fillTreeFromArray(array);
-    }
+    ~ArtistData();
 
-    ~ArtistData() {
-        delete songs_tree;
-    }
+    bool operator < (ArtistData & artist_data);
+    bool operator ==(const ArtistData & artist_data);
 
-    bool operator < (ArtistData & artist_data){
-        return artist_id < artist_data.artist_id;
-    }
-    bool operator ==(const ArtistData & artist_data){
-        return artist_id == artist_data.artist_id;
-    }
+    AVLTree<SongData>* getSongsTree();
 
-    AVLTree<SongData>* getSongsTree() {
-        return songs_tree;
-    }
-
-    int getArtistID(){
-        return artist_id;
-    }
+    int getArtistID();
 };
+
 
 #endif //WET1DS_ARTISTDATA_H
     
