@@ -43,6 +43,7 @@ StatusType Diesel::RemoveArtist(int artistID) {
     //find artist in artist tree -> found data | log(n)
     if (artistID<=0)
         return INVALID_INPUT;
+
     try {
         MainArtistData search_data(artistID);
         MainArtistData *found_data = all_artists_tree.findData(
@@ -51,25 +52,30 @@ StatusType Diesel::RemoveArtist(int artistID) {
             return FAILURE;
         int numSongs = found_data->getNumSongs();
         ArtistData delete_artist(artistID);
-        int *listNodesFlagsArray = new int[numSongs];
+        ListNode<StreamData>** listNodesFlagsArray = new ListNode<StreamData>*[numSongs];
+        for(int i=0;i<numSongs;i++){
+            listNodesFlagsArray[i] = nullptr;
+        }
         ListNode<StreamData> **arr = found_data->getNodesArray();
 
+        int k=0;
         //go over songs array, for each song delete artist node (will delete songs tree also)
         for (int i = 0; i < numSongs; i++) {
             ArtistData *found_artist = arr[i]->data->artists_tree->findData(
                     &delete_artist);
-            if (found_artist)
+            if (found_artist) {
                 arr[i]->data->artists_tree->remove(found_artist);
-            if (arr[i]->data->artists_tree->getRoot() == nullptr) {
-                listNodesFlagsArray[i] = 1; //needs to be deleted afterwards
-            } else {
-                listNodesFlagsArray[i] = 0;
+            }
+            if (arr[i]->data->artists_tree->getRoot() == nullptr &&
+                !arr[i]->getMarked()) {
+                listNodesFlagsArray[k] = arr[i]; //needs to be deleted afterwards
+                k++;
+                arr[i]->setMarked();
             }
         }
-        for (int j = 0;
-             j < numSongs; j++) { //delete ListNodes with no artists
+        for (int j = 0;j < numSongs; j++) { //delete ListNodes with no artists
             if (listNodesFlagsArray[j]) {
-                num_streams_list.removeNode(arr[j]);
+                num_streams_list.removeNode(listNodesFlagsArray[j]);
             }
         }
         delete[] listNodesFlagsArray;
@@ -81,6 +87,8 @@ StatusType Diesel::RemoveArtist(int artistID) {
     }
     return SUCCESS;
 }
+
+
 
 StatusType Diesel::AddToSongCount(int artistID, int songID) {
     //find  artist and get song, song linked list node

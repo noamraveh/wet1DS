@@ -12,10 +12,19 @@ public:
     T* data;
     ListNode* next;
     ListNode* prev;
-    explicit ListNode(T* data):data(data),next(nullptr),prev(nullptr){}
+    bool marked;
+    explicit ListNode(T* data):data(data),next(nullptr),prev(nullptr),marked(false){}
     ListNode() = default;
     ~ListNode(){
         delete data;
+    }
+
+    void setMarked(){
+        marked = true;
+    }
+
+    bool getMarked(){
+        return marked;
     }
 };
 
