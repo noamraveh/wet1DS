@@ -1,5 +1,5 @@
 //
-// Created by Carmel on 07-May-20.
+//final
 //
 #ifndef DIESEL_LINKEDLIST_H
 #define DIESEL_LINKEDLIST_H

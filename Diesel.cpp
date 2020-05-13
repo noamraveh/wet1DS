@@ -1,3 +1,4 @@
+//final
 #include "Diesel.h"
 
 StatusType Diesel::AddArtist(int artistID, int numOfSongs) {
